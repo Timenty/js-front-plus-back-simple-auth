@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль пользователя</title>
+</head>
+<body>
+    <h2>Профиль пользователя</h2>
+    <div id="profileData"></div>
+    <button id="logoutButton">Выйти</button>
+
+    <script>
+        // Проверка авторизации при загрузке страницы
+        window.onload = function() {
+            // если будет интересно можно посмотреть и разобрать токен можно на https://jwt.io/
+            console.log('Токен:', localStorage.getItem('token'));
+
+            fetch('/check-auth', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token') // Передача токена в заголовке запроса
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Авторизация не пройдена');
+            })
+            .then(data => {
+                document.getElementById("profileData").textContent = data.message;
+            })
+            .catch(error => {
+                console.error('Ошибка авторизации:', error);
+                window.location.href = '/'; // Перенаправление на страницу входа в случае неудачной авторизации
+            });
+        };
+
+        document.getElementById("logoutButton").addEventListener("click", function() {
+            localStorage.removeItem('token'); // Удаление токена из локального хранилища
+            window.location.href = '/';
+        });
+    </script>
+</body>
+</html>

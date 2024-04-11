@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль пользователя</title>
+</head>
+<body>
+    <h2>Профиль пользователя</h2>
+    <p>Добро пожаловать в ваш профиль!</p>
+
+    <button id="logoutButton">Выйти</button>
+
+    <script>
+        document.getElementById("logoutButton").addEventListener("click", function() {
+            fetch('/logout', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '/';
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка выхода из системы:', error);
+            });
+        });
+    </script>
+</body>
+</html>
